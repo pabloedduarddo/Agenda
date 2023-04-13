@@ -11,8 +11,9 @@ Essas instruções fornecerão uma cópia do projeto instalado e funcionando em 
 ### Pré requisitos:
 É necessário ter instalado no computador:
 * Java versão 17 ou superior
-* Banco de dados MySQL versão 8
+* XAMPP
 ### Instalação:
-* Execute o banco de dados MySQL (localhost) como root sem nenhuma senha definida (senha em branco)
+* Execute o XAMPP e acesse a administração do MySQL (phpmyadmin)
 * Crie um novo banco de dados de nome dbagenda
-* Faça a importação do DUMP deste projeto (repositório) para o MySQL
+* Faça a importação do arquivo contatos.sql para o XAMPP
+* Em "Releases" Faça o download da agenda (.jar) e execute o arquivo 
