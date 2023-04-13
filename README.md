@@ -5,7 +5,7 @@ Simples agenda de contatos, para sistemas Windows, Linux ou MAC
 ![Print da tela](https://github.com/pabloedduarddo/Agenda/blob/main/img/print.png)
 ## Autor
 Pablo Eduardo
-Projeto desenvolvido nas aulas de Banco de Dados, no Senac Tatuapé
+* Projeto desenvolvido nas aulas de Banco de Dados, no Senac Tatuapé
 
 ## Instalação da agenda
 Essas instruções fornecerão uma cópia do projeto instalado e funcionando em sua máquina local.
