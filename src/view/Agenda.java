@@ -30,9 +30,6 @@ public class Agenda extends JFrame {
 	private PreparedStatement pst;
 	private ResultSet rs;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtID;
@@ -45,9 +42,6 @@ public class Agenda extends JFrame {
 	private JButton btnUpdate;
 	private JButton btnDelete;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -61,9 +55,6 @@ public class Agenda extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Agenda() {
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -109,28 +100,25 @@ public class Agenda extends JFrame {
 		txtEmail.setBounds(73, 130, 246, 20);
 		contentPane.add(txtEmail);
 		txtEmail.setColumns(10);
-		//Uso do PlainDocument para limpar os campos
 		txtEmail.setDocument(new Validador (30));
 
 		txtNome = new JTextField();
 		txtNome.setBounds(73, 50, 246, 20);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
-		//Uso do PlainDocument para limpar os campos
 		txtNome.setDocument(new Validador (30));
 
 		txtFone = new JTextField();
 		txtFone.setBounds(73, 102, 121, 20);
 		contentPane.add(txtFone);
 		txtFone.setColumns(10);
-		//Uso do PlainDocument para limpar os campos
 		txtFone.setDocument(new Validador (15));
 
 		btnCreate = new JButton("");
 		btnCreate.setEnabled(false);
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// botão adicionar contato
+				
 				adicionarContato();
 			}
 		});
@@ -150,7 +138,6 @@ public class Agenda extends JFrame {
 		JButton btnSobre = new JButton("");
 		btnSobre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// as linhas abaixo fazem o link entre o JFrame e JDialog
 				Sobre sobre = new Sobre();
 				sobre.setVisible(true);
 			}
@@ -165,7 +152,6 @@ public class Agenda extends JFrame {
 		JButton btnLimpar = new JButton("");
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Evento clicar no botão
 				limparCampos();
 			}
 		});
@@ -189,7 +175,6 @@ public class Agenda extends JFrame {
 		btnBuscar.setBounds(329, 25, 46, 48);
 		contentPane.add(btnBuscar);
 
-		// Substituir i clique pela tecla <enter> em um botão
 		getRootPane().setDefaultButton(btnBuscar);
 
 		btnUpdate = new JButton("");
@@ -220,35 +205,25 @@ public class Agenda extends JFrame {
 		btnDelete.setBounds(146, 171, 48, 48);
 		contentPane.add(btnDelete);
 
-	} // fim do construtor
+	}
 
-	/**
-	 * Método para verificar o status de conexão
-	 */
 	private void status() {
 		// System.out.println("teste janela ativada");
 		try {
-			// Abrir a conexão com o banco
 			con = dao.conectar();
-			if (con == null) {// Mudar o ícone da jlabel
+			if (con == null) {
 				lblStatus.setIcon(new ImageIcon(Agenda.class.getResource("/img/dboff1.png")));
 			} else {
 				lblStatus.setIcon(new ImageIcon(Agenda.class.getResource("/img/dbon11.png")));
 			}
-			// Fechar a conexão
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-	}// fim do método status
-
-	/**
-	 * Método para adicionar um contato no banco
-	 */
+	}
 	private void adicionarContato() {
 		System.out.println("Teste do botão adicionar");
 
-		// validação de campos obrigatórios
 		if (txtNome.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Preencha o nome do contato");
 			txtNome.requestFocus();
@@ -259,81 +234,48 @@ public class Agenda extends JFrame {
 
 			}
 		} else {
-			// lógica principal
-			// a linha abaixo cria uma variável de nome create que recebe o código SQL
 			String create = "insert into contatos (nome,fone,email) values (?,?,?)";
-			// tratamento de exceção
 			try {
-				// Abrir a conexão com o banco
 				con = dao.conectar();
-				// Uso da classe PreparedStatement para executar a função sql e replicar no
-				// banco
 				pst = con.prepareStatement(create);
-				// setar(definir) os parâmetros (?,?,?) de acordo com o preenchimento das caixas
-				// de texto
 				pst.setString(1, txtNome.getText());
 				pst.setString(2, txtFone.getText());
 				pst.setString(3, txtEmail.getText());
-				// Executar a instrução sql (query)
 				pst.executeUpdate();
-				// Confirmar para o usuário
 				JOptionPane.showMessageDialog(null, "Contato adicionado com sucesso!");
-				// Limpar os campos
 
 				limparCampos();
-
-				// Fechar a conexão com o banco
 				con.close();
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
 
-	}// fim do método adicionarContato
-
-	/**
-	 * Método responsável por limpar os campos
-	 */
+	}
 	private void buscarContato() {
-		// Validação da busca (obrigar o usuário a preencher um nome)
 		if (txtNome.getText().isEmpty()) {
 			JOptionPane.showInternalMessageDialog(null, "Digite o nome do contato");
-			txtNome.requestFocus(); // Setar o cursor na caixa de texto
+			txtNome.requestFocus();
 		} else {
-
-			// System.out.println("Teste do botão buscar");
 			String read = "select * from contatos where nome = ?";
 			try {
-				// Abrir a conexão
 				con = dao.conectar();
-				// Prepara a execução da query
 				pst = con.prepareStatement(read);
-				// Pegar o conteúdo da caixa de texto e substituir o parâmetro "?"
 				pst.setString(1, txtNome.getText());
-				// Uso do ResultSet para obter os dados do contatos
 				ResultSet rs = pst.executeQuery();
-				// Se existir um contato cadastrado
 				if (rs.next()) {
-					// Preencher as caixas de texto com o fone e email
-					// ATENÇÃO O NOME (Já foi preenchido)
-					txtID.setText(rs.getString(1));// 1 ID
-					txtFone.setText(rs.getString(3));// 3 FONE
-					txtEmail.setText(rs.getString(4));// 4 EMAIL
-					// Desativar o botão adicionar
+					txtID.setText(rs.getString(1));
+					txtFone.setText(rs.getString(3));
+					txtEmail.setText(rs.getString(4));
 					btnCreate.setEnabled(false);
-					//Desativar o botão buscar
 					btnBuscar.setEnabled(false);
-					// Ativar os botões editar e excluir
 					btnUpdate.setEnabled(true);
 					btnDelete.setEnabled(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Contato inexistente");
-					// Ativar o botão adicionar
+					JOptionPane.showMessageDialog(null, "Contato inexistente")
 					btnCreate.setEnabled(true);
-					// Desativar o botão buscar
 					btnBuscar.setEnabled(false);
 				}
-				// NUNCA ESQUECER DE FECHAR A CONEXÃO
 				con.close();
 
 			} catch (Exception e) {
@@ -343,12 +285,7 @@ public class Agenda extends JFrame {
 
 	}
 
-	/**
-	 * Método responsável pela edição dos dados de um contato
-	 */
 	private void editarContato() {
-		// System.out.println("teste do botão editar");
-		// Validação de campos obrigatórios
 		if (txtNome.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Preencha o nome do contato");
 			txtNome.requestFocus();
@@ -356,26 +293,17 @@ public class Agenda extends JFrame {
 			JOptionPane.showMessageDialog(null, "Preencha o telefone");
 			txtFone.requestFocus();
 		} else {
-			// Lógica principal (CRUD Update)
-			// Criando uma variaável string que irá receber a query
 			String update = "update contatos set nome = ?, fone = ?, email = ? where id = ?";
-			// Tratamento de exceções
 			try {
-				// Abrir a conexão com o banco
 				con = dao.conectar();
-				// Preparar a query(substituir ????)
 				pst = con.prepareStatement(update);
 				pst.setString(1, txtNome.getText());
 				pst.setString(2, txtFone.getText());
 				pst.setString(3, txtEmail.getText());
 				pst.setString(4, txtID.getText());
-				// Executar o update no banco
 				pst.executeUpdate();
-				// Confirmar para o usuário
 				JOptionPane.showMessageDialog(null, "Dados do contato alterado com sucesso");
-				// NUNCA esquecer de fechar a conexão
 				con.close();
-				// Limpar os campos
 				limparCampos();
 			} catch (Exception e) {
 				System.out.println(e);
@@ -383,31 +311,19 @@ public class Agenda extends JFrame {
 		}
 	}
 	
-	/**
-	 * Método responsável por excluir um contato
-	 */
 	private void excluirContato() {
-		//System.out.println("teste do botão excluir");
-		//Confirmação de exclusão
-		//A variável confirma captura a opção escolhida do JOptionPane
 		int confirma = JOptionPane.showConfirmDialog(null, "Confirmar a exclusão deste contato?", "ATENÇÃO", JOptionPane.YES_NO_OPTION);
 		if (confirma == JOptionPane.YES_OPTION) {
-			//QUERY	 (INSTRUÇÃO SQL)
 			String delete = "delete from contatos where id=?";
-			//Tratamento de exceções
+			
 			try {
-				//Abrir a conexão
 				con = dao.conectar();
-				//Preparar a query (instrução sql)
 				pst = con.prepareStatement(delete);
 				pst.setString(1, txtID.getText());
 				pst.executeUpdate();
-				//Limpar os campos
 				limparCampos();
-				//Exibir mensagem ao usuário
 				JOptionPane.showMessageDialog(null, "Contato excluído");
 				
-				//Fechar conexão
 				con.close();
 			} catch (Exception e) {
 				System.out.println(e);
@@ -415,18 +331,14 @@ public class Agenda extends JFrame {
 		}
 	}
 
-	/**
-	 * Método resposável por limpar os campos
-	 */
 	private void limparCampos() {
 		txtID.setText(null);
 		txtNome.setText(null);
 		txtFone.setText(null);
 		txtEmail.setText(null);
-		// Setar botões
 		btnCreate.setEnabled(false);
 		btnUpdate.setEnabled(false);
 		btnDelete.setEnabled(false);
 		btnBuscar.setEnabled(true);
-	}// fim do método limpar campos
-}// fim do código
+	}
+}
