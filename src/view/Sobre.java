@@ -10,14 +10,8 @@ import javax.swing.ImageIcon;
 
 public class Sobre extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -32,9 +26,6 @@ public class Sobre extends JDialog {
 		});
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public Sobre() {
 		setModal(true);
 		setResizable(false);
